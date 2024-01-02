@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://dip0ba6nne24h"]
+
+[ext_resource type="Script" path="res://Piece.gd" id="1_f7gfj"]
+
+[node name="Piece" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 220.0
+offset_top = 220.0
+offset_right = 220.0
+offset_bottom = 220.0
+script = ExtResource("1_f7gfj")
+
+[node name="PieceTexture" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

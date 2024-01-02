@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="ChessPieceList" load_steps=21 format=3 uid="uid://0bmtqraork24"]
+
+[ext_resource type="Script" path="res://pieces/chess_piece_list.gd" id="1_ovc41"]
+[ext_resource type="Texture2D" uid="uid://bpm171jwava68" path="res://pieces/sprite/ND.png" id="2_ccaba"]
+[ext_resource type="Script" path="res://pieces/chess_piece.gd" id="2_pkd7x"]
+[ext_resource type="Texture2D" uid="uid://caotjovpeqit3" path="res://pieces/sprite/NL.png" id="3_432et"]
+[ext_resource type="Texture2D" uid="uid://cqckojofqi3cl" path="res://pieces/sprite/PD.png" id="4_pce7g"]
+[ext_resource type="Texture2D" uid="uid://crkws7ysg7cxs" path="res://pieces/sprite/RD.png" id="4_q5s7x"]
+[ext_resource type="Texture2D" uid="uid://c6fheuuior1ij" path="res://pieces/sprite/PL.png" id="5_fk0xu"]
+[ext_resource type="Texture2D" uid="uid://byvgb60xvaxjd" path="res://pieces/sprite/RL.png" id="5_lwhpy"]
+[ext_resource type="Texture2D" uid="uid://n8846ace8nsd" path="res://pieces/sprite/BD.png" id="8_i5huu"]
+[ext_resource type="Texture2D" uid="uid://chj0vr35da6br" path="res://pieces/sprite/BL.png" id="9_rd6jx"]
+[ext_resource type="Texture2D" uid="uid://boh5mgrvqk3ft" path="res://pieces/sprite/QD.png" id="10_iamiv"]
+[ext_resource type="Texture2D" uid="uid://blqnmm4os1iax" path="res://pieces/sprite/QL.png" id="11_rw7h3"]
+[ext_resource type="Texture2D" uid="uid://nx43afi6r4f4" path="res://pieces/sprite/KD.png" id="12_5k45s"]
+[ext_resource type="Texture2D" uid="uid://cchvclth83y5j" path="res://pieces/sprite/KL.png" id="13_x7wi5"]
+
+[sub_resource type="Resource" id="Resource_jdhgn"]
+script = ExtResource("2_pkd7x")
+piece_name = "Pawn"
+texture_dark = ExtResource("4_pce7g")
+texture_light = ExtResource("5_fk0xu")
+
+[sub_resource type="Resource" id="Resource_awcns"]
+script = ExtResource("2_pkd7x")
+piece_name = "Rook"
+texture_dark = ExtResource("4_q5s7x")
+texture_light = ExtResource("5_lwhpy")
+
+[sub_resource type="Resource" id="Resource_o8dkx"]
+script = ExtResource("2_pkd7x")
+piece_name = "Knight"
+texture_dark = ExtResource("2_ccaba")
+texture_light = ExtResource("3_432et")
+
+[sub_resource type="Resource" id="Resource_apm5a"]
+script = ExtResource("2_pkd7x")
+piece_name = "Bishop"
+texture_dark = ExtResource("8_i5huu")
+texture_light = ExtResource("9_rd6jx")
+
+[sub_resource type="Resource" id="Resource_2vwjo"]
+script = ExtResource("2_pkd7x")
+piece_name = "Queen"
+texture_dark = ExtResource("10_iamiv")
+texture_light = ExtResource("11_rw7h3")
+
+[sub_resource type="Resource" id="Resource_448bj"]
+script = ExtResource("2_pkd7x")
+piece_name = "King"
+texture_dark = ExtResource("12_5k45s")
+texture_light = ExtResource("13_x7wi5")
+
+[resource]
+script = ExtResource("1_ovc41")
+AllPieces = Array[ExtResource("2_pkd7x")]([SubResource("Resource_jdhgn"), SubResource("Resource_awcns"), SubResource("Resource_o8dkx"), SubResource("Resource_apm5a"), SubResource("Resource_2vwjo"), SubResource("Resource_448bj")])
