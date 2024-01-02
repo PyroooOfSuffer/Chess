@@ -1,36 +1,39 @@
 extends Control
 
 @export var dark: bool = false
+var setup: bool = true
 
-var selected = false
+var hovering = false
 
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _visual_update() -> void:
+	if setup:
+		if dark:
+			$TileColor.color = global.color_dark 
+		else:
+			$TileColor.color = global.color_light
+		$TileColor.size = global.tile_size
+		setup = false
+
+
 func _process(_delta):
 	_visual_update()
 	_selecting()
 
-func _visual_update() -> void:
-	if dark:
-		$TileColor.color = global.color_dark 
-	else:
-		$TileColor.color = global.color_light
-	$TileColor.size = global.tile_size
 
 func _selecting():
-	if selected:
+	if hovering:
 		if Input.is_action_just_pressed("click"):
-			print(name)
+			if not global.selected_piece.is_empty():
+				global.selected_tile = name
 
 
 func _on_tile_color_mouse_entered():
-	selected = true
+	hovering = true
 
 
 func _on_tile_color_mouse_exited():
-	selected = false
+	hovering = false

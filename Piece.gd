@@ -2,36 +2,52 @@ extends Control
 
 @export var piece_type: String = "Queen"
 @export var dark: bool = false
+var setup: bool = true
+
+var hovering = false
 
 
-var selected = false
-
-
-func setup_piece():
-	var texture_piece = global.all_pieces.get_piece(piece_type)
-	$PieceTexture.texture = texture_piece.texture_dark if dark else texture_piece.texture_light 
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	setup_piece()
+	pass
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _visual_update():
+	if setup:
+		var texture_piece = global.all_pieces.get_piece(piece_type)
+		$PieceTexture.texture = texture_piece.texture_dark if dark else texture_piece.texture_light
+		setup = false
+
+
 func _process(_delta):
+	_visual_update()
 	_selecting()
 
 
-func _selecting():
-	if selected:
+func _selecting() -> void:
+	if hovering:
 		if Input.is_action_just_pressed("click"):
-			print(name)
-
-
+			if global.selected_piece.is_empty(): 
+				global.selected_piece = name
+			else:
+				pass
+	if name == global.selected_piece:
+		$PieceTexture.scale = Vector2(1.02,1.02)
+		if not global.selected_tile.is_empty():
+			var x = float(str(global.selected_tile)[0])
+			var y = float(str(global.selected_tile)[1])
+			position = Vector2(x,y) * global.tile_size + global.tile_size * 0.5
+			global.selected_tile = StringName()
+			global.selected_piece = StringName()
+			
+			var dict_to_add = { name : str(x,y)}
+			global.position_piece.merge(dict_to_add, true)
 
 func _on_mouse_entered():
-	selected = true
+	hovering = true
+	if global.selected_piece.is_empty():
+		$PieceTexture.scale = Vector2(1.02,1.02)
 
 
 func _on_mouse_exited():
-	selected = false
+	hovering = false
+	$PieceTexture.scale = Vector2(1,1)

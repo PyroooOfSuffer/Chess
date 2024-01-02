@@ -5,7 +5,7 @@ class_name ChessPieceList
 @export var AllPieces: Array[ChessPiece]
 
 func check_name(piece: ChessPiece, name: String) -> bool:
-	print("Comparing %s with %s" % [piece.piece_name, name])
+	#print("Comparing %s with %s" % [piece.piece_name, name])   FROM FLO
 	return piece.piece_name == name
 
 func get_piece(name: String) -> ChessPiece:
