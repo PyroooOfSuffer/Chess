@@ -11,12 +11,19 @@ func _ready():
 
 func _visual_update() -> void:
 	if setup:
-		if dark:
-			$TileColor.color = global.color_dark 
-		else:
-			$TileColor.color = global.color_light
-		$TileColor.size = global.tile_size
-		setup = false
+		if not name in global.legal_moves or not name in global.takes:
+			if dark:
+				$TileColor.color = global.color_dark 
+			else:
+				$TileColor.color = global.color_light
+			$TileColor.size = global.tile_size
+			setup = false
+	if name in global.legal_moves:
+		$TileColor.color = global.color_legal
+		setup = true
+	elif name in global.takes:
+		$TileColor.color = global.color_takes
+		setup = true
 
 
 func _process(_delta):
@@ -24,7 +31,7 @@ func _process(_delta):
 	_selecting()
 
 
-func _selecting():
+func _selecting() -> void:
 	if hovering:
 		if Input.is_action_just_pressed("click"):
 			if not global.selected_piece.is_empty():

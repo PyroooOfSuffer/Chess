@@ -3,7 +3,7 @@ extends Panel
 @export var tile: PackedScene 
 @export var piece: PackedScene
 
-func _board_creater():
+func _board_creater() -> void:
 	var dark: bool = false
 	for y in range(8):
 		for x in range(8):
@@ -17,7 +17,7 @@ func _board_creater():
 		dark = !dark
 
 
-func _piece_spawner():
+func _piece_spawner() -> void:
 	for key in global.initial_position_piece.keys():
 		for piece_pos in global.initial_position_piece[key]:
 			var x = float(piece_pos[0])

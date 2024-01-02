@@ -24,6 +24,10 @@ window/size/viewport_width=480
 window/size/viewport_height=480
 window/size/resizable=false
 
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 click={
