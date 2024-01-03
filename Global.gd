@@ -5,7 +5,7 @@ extends Node
 @export var color_light: Color = Color.WHEAT
 @export var tile_size: Vector2 = Vector2(60, 60)
 
-@export var color_legal: Color = Color.AQUA
+@export var color_legal: Color = Color(Color.WHITE, 0.5)
 @export var color_takes: Color = Color.LIGHT_PINK
 @export_group("") 
 
@@ -59,11 +59,29 @@ func _get_legal_moves() -> void:
 			else:
 				block_light.append(pos_block)
 		
+		
 		if piece_type == "Pawn":
-			if dark:  # DARK PAWN ----------------------------------------
-				if piece_pos in initial_position_piece["D_Pawn"]:
-					for dy in range(2):
-						var new_move = str(x,int(y)+dy+1)
+			var move_direction = 1 if dark else -1
+			var start_pos = piece_pos in initial_position_piece["D_Pawn"] if dark else piece_pos in initial_position_piece["L_Pawn"]
+			
+			if start_pos:
+				for dy in range(1,3):
+					var new_move = str(x, int(y) + move_direction * dy)
+					if new_move in block_dark or new_move in block_light:
+						break
+					else:
+						possible_legal_moves.append(new_move)
+			else:
+				var new_move = str(x, int(y) + move_direction)
+				if new_move not in block_dark and new_move not in block_light:
+					possible_legal_moves.append(new_move)
+		elif piece_type == "Rook":
+			if dark:  # DARK ROOK ----------------------------------------
+				for direction in [Vector2(0,1),Vector2(0,-1),Vector2(1,0),Vector2(-1,0)]:
+					var dx = direction.x
+					var dy = direction.y
+					for d in range(1, 8):
+						var new_move = str(int(x) + d * dx, int(y) + d * dy)
 						if new_move in block_dark:
 							break
 						elif new_move in block_light:
@@ -71,18 +89,12 @@ func _get_legal_moves() -> void:
 							break
 						else:
 							possible_legal_moves.append(new_move)
-				else:
-					var new_move = str(x,int(y)+1)
-					if new_move in block_dark:
-						pass
-					elif new_move in block_light:
-						possible_takes.append(new_move)
-					else:
-						possible_legal_moves.append(new_move)
-			else:  # LIGHT PAWN ----------------------------------------
-				if piece_pos in initial_position_piece["L_Pawn"]:
-					for dy in range(2):
-						var new_move = str(x,int(y)-dy-1)
+			else:  # LIGHT ROOK ----------------------------------------
+				for direction in [Vector2(0,1),Vector2(0,-1),Vector2(1,0),Vector2(-1,0)]:
+					var dx = direction.x
+					var dy = direction.y
+					for d in range(1, 8):
+						var new_move = str(int(x) + d * dx, int(y) + d * dy)
 						if new_move in block_light:
 							break
 						elif new_move in block_dark:
@@ -90,93 +102,119 @@ func _get_legal_moves() -> void:
 							break
 						else:
 							possible_legal_moves.append(new_move)
-				else:
-					var new_move = str(x,int(y)-1)
-					if new_move in block_light:
-						pass
-					elif new_move in block_dark:
-						possible_takes.append(new_move)
-					else:
-						possible_legal_moves.append(new_move)
-		elif piece_type == "Rook":
-			if dark:  # DARK ROOK ----------------------------------------
-				for dy in range(8):
-					var new_move = str(x,int(y)+dy+1)
-					if new_move in block_dark:
-						break
-					elif new_move in block_light:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
-					new_move = str(x,int(y)-dy-1)
-					if new_move in block_dark:
-						break
-					elif new_move in block_light:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
-				for dx in range(8):
-					var new_move = str(int(x)+dx+1,y)
-					if new_move in block_dark:
-						break
-					elif new_move in block_light:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
-					new_move = str(int(x)-dx-1,y)
-					if new_move in block_dark:
-						break
-					elif new_move in block_light:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
-			else:  # LIGHT ROOK ----------------------------------------
-				for dy in range(8):
-					var new_move = str(x,int(y)+dy+1)
-					if new_move in block_light:
-						break
-					elif new_move in block_dark:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
-					new_move = str(x,int(y)-dy-1)
-					if new_move in block_light:
-						break
-					elif new_move in block_dark:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
-				for dx in range(8):
-					var new_move = str(int(x)+dx+1,y)
-					if new_move in block_light:
-						break
-					elif new_move in block_dark:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
-					new_move = str(int(x)-dx-1,y)
-					if new_move in block_light:
-						break
-					elif new_move in block_dark:
-						possible_takes.append(new_move)
-						break
-					else:
-						possible_legal_moves.append(new_move)
 		elif piece_type == "Knight":
-			pass
+			if dark:  # DARK KNIGHT ----------------------------------------
+				var moves = [
+					Vector2(2,1),Vector2(2, -1),Vector2(-2,1),Vector2(-2,-1),
+					Vector2(1,2),Vector2(-1, 2),Vector2(1,-2),Vector2(-1,-2)
+				]
+				for d in moves:
+					var dx = d.x
+					var dy = d.y
+					var new_move = str(int(x) + dx, int(y) + dy)
+					if new_move in block_light:
+						possible_takes.append(new_move)
+					elif not new_move in block_dark:
+						possible_legal_moves.append(new_move)
+			else:  # LIGHT KNIGHT ----------------------------------------
+				var moves = [
+					Vector2(2,1),Vector2(2, -1),Vector2(-2,1),Vector2(-2,-1),
+					Vector2(1,2),Vector2(-1, 2),Vector2(1,-2),Vector2(-1,-2)
+				]
+				for d in moves:
+					var dx = d.x
+					var dy = d.y
+					var new_move = str(int(x) + dx, int(y) + dy)
+					if new_move in block_dark:
+						possible_takes.append(new_move)
+					elif not new_move in block_light:
+						possible_legal_moves.append(new_move)
 		elif piece_type == "Bishop":
-			pass
+			if dark:  # DARK BISHOP ----------------------------------------
+				for direction in [Vector2(1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1)]:
+					var dx = direction.x
+					var dy = direction.y
+					for d in range(1, 8):
+						var new_move = str(int(x) + d * dx, int(y) + d * dy)
+						if new_move in block_dark:
+							break
+						elif new_move in block_light:
+							possible_takes.append(new_move)
+							break
+						else:
+							possible_legal_moves.append(new_move)
+			else:  # LIGHT BISHOP ----------------------------------------
+				for direction in [Vector2(1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1)]:
+					var dx = direction.x
+					var dy = direction.y
+					for d in range(1, 8):
+						var new_move = str(int(x) + d * dx, int(y) + d * dy)
+						if new_move in block_light:
+							break
+						elif new_move in block_dark:
+							possible_takes.append(new_move)
+							break
+						else:
+							possible_legal_moves.append(new_move)
 		elif piece_type == "Queen":
-			pass
+			if dark:  # DARK QUEEN ----------------------------------------
+				for direction in [
+						Vector2(1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1),
+						Vector2(0,1),Vector2(0,-1),Vector2(1,0),Vector2(-1,0)]:
+					var dx = direction.x
+					var dy = direction.y
+					for d in range(1, 8):
+						var new_move = str(int(x) + d * dx, int(y) + d * dy)
+						if new_move in block_dark:
+							break
+						elif new_move in block_light:
+							possible_takes.append(new_move)
+							break
+						else:
+							possible_legal_moves.append(new_move)
+			else:  # LIGHT QUEEN ----------------------------------------
+				for direction in [
+						Vector2(1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1),
+						Vector2(0,1),Vector2(0,-1),Vector2(1,0),Vector2(-1,0)]:
+					var dx = direction.x
+					var dy = direction.y
+					for d in range(1, 8):
+						var new_move = str(int(x) + d * dx, int(y) + d * dy)
+						if new_move in block_light:
+							break
+						elif new_move in block_dark:
+							possible_takes.append(new_move)
+							break
+						else:
+							possible_legal_moves.append(new_move)
 		elif piece_type == "King":
-			pass 
+			if dark:  # DARK KING ----------------------------------------
+				var moves = [
+					Vector2(1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1),
+					Vector2(0,1),Vector2(0,-1),Vector2(1,0),Vector2(-1,0)
+				]
+				for d in moves:
+					var dx = d.x
+					var dy = d.y
+					var new_move = str(int(x) + dx, int(y) + dy)
+					if new_move in block_light:
+						possible_takes.append(new_move)
+					elif not new_move in block_dark:
+						possible_legal_moves.append(new_move)
+			else:  # LIGHT KING ----------------------------------------
+				var moves = [
+					Vector2(1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1),
+					Vector2(0,1),Vector2(0,-1),Vector2(1,0),Vector2(-1,0)
+				]
+				for d in moves:
+					var dx = d.x
+					var dy = d.y
+					var new_move = str(int(x) + dx, int(y) + dy)
+					if new_move in block_dark:
+						possible_takes.append(new_move)
+					elif not new_move in block_light:
+						possible_legal_moves.append(new_move)
 		
 		legal_moves = possible_legal_moves
 		takes = possible_takes
+	

@@ -12,6 +12,7 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_f7gfj")
+metadata/_edit_group_ = true
 
 [node name="PieceTexture" type="TextureRect" parent="."]
 layout_mode = 0

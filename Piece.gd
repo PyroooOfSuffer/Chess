@@ -4,6 +4,7 @@ extends Control
 @export var dark: bool = false
 var setup: bool = true
 
+@export var piece_position: String
 var hovering = false
 
 
@@ -18,18 +19,25 @@ func _visual_update() -> void:
 		setup = false
 
 
-func _process(_delta):
+func _process(delta):
 	_visual_update()
-	_selecting()
+	_get_position()
+	_selecting(delta)
 
 
-func _selecting() -> void:
+func _get_position():
+	piece_position = global.position_piece[str(name)]
+
+func _selecting(delta) -> void:
 	if hovering:
 		if Input.is_action_just_pressed("click"):
 			if global.selected_piece.is_empty(): 
 				global.selected_piece = name
 				global.legal_moves = []
 				global.takes = []
+			elif piece_position in global.takes: # u get taked
+				global.selected_tile = piece_position 
+				queue_free() # die
 	if name == global.selected_piece:
 		$PieceTexture.scale = Vector2(1.02,1.02)
 		if not global.selected_tile.is_empty():

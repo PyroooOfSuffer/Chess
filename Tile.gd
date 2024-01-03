@@ -19,7 +19,10 @@ func _visual_update() -> void:
 			$TileColor.size = global.tile_size
 			setup = false
 	if name in global.legal_moves:
-		$TileColor.color = global.color_legal
+		if dark:
+			$TileColor.color = global.color_dark.blend(global.color_legal) 
+		else:
+			$TileColor.color = global.color_light.blend(global.color_legal)
 		setup = true
 	elif name in global.takes:
 		$TileColor.color = global.color_takes
